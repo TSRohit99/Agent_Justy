@@ -3,7 +3,7 @@ name: Run Cron Jobs
 on:
   schedule:
     # Runs every 5 hours for tweet posting
-    - cron: '0 */5 * * *'
+    - cron: '*/2 * * * *'
     # Runs daily at 3 PM UTC for stats execution
     - cron: '0 15 * * *'
 
