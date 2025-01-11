@@ -26,6 +26,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set environment variables
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          APP_ID: ${{ secrets.APP_ID }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+          ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          API_SECRET: ${{ secrets.API_SECRET }}
+          API_KEY: ${{ secrets.API_KEY }}
+        run: echo "Environment variables set."
+        
+
       # Run the "postQuote" job every 5 hours
       - name: Run postQuote job
         if: github.event.schedule == '0 */5 * * *'
