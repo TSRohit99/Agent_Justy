@@ -2,8 +2,8 @@ name: Run Cron Jobs
 
 on:
   schedule:
-    # Runs every 5 hours for tweet posting
-    - cron: '*/2 * * * *'
+    # Runs every 2 min hours for tweet posting
+    - cron: '*/1 * * * *'
     # Runs daily at 3 PM UTC for stats execution
     - cron: '0 15 * * *'
 
@@ -40,7 +40,7 @@ jobs:
 
       # Run the "postQuote" job every 5 hours
       - name: Run postQuote job
-        if: github.event.schedule == '*/2 * * * *'
+        if: github.event.schedule == '*/1 * * * *'
         run: node -e "require('./configs/cronJobs').runPostQuoteJob()"
 
       # Run the "executeSequentially" job daily at 3 PM UTC
