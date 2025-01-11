@@ -10,6 +10,15 @@ on:
 jobs:
   cron-jobs:
     runs-on: ubuntu-latest
+    # Move environment variables to job level
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      APP_ID: ${{ secrets.APP_ID }}
+      BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+      ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      API_SECRET: ${{ secrets.API_SECRET }}
+      API_KEY: ${{ secrets.API_KEY }}
 
     steps:
       # Checkout the repository
@@ -25,18 +34,6 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: npm install
-
-      - name: Set environment variables
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          APP_ID: ${{ secrets.APP_ID }}
-          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
-          ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          API_SECRET: ${{ secrets.API_SECRET }}
-          API_KEY: ${{ secrets.API_KEY }}
-        run: echo "Environment variables set."
-        
 
       # Run the "postQuote" job every 5 hours
       - name: Run postQuote job
