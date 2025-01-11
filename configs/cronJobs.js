@@ -1,25 +1,22 @@
-const cron = require('node-cron');
 const { postQuote } = require('../lib/quotesQueue');
 const { executeSequentially } = require('../lib/getStats');
 
-
+// // Immediately post a quote (e.g., for initialization or manual runs)
 // (async () => {
-//     console.log('Posting the first quote immediately...');
+//     console.log('Posting the first quote...');
 //     await postQuote();
 // })();
 
-cron.schedule('0 */5 * * *', async () => {
+// Function to run the quote posting job
+async function runPostQuoteJob() {
     console.log('Running scheduled tweet...');
     await postQuote();
-});
+}
 
-// Schedule the job to run at 3 PM UTC daily
-cron.schedule('0 15 * * *', async () => {
-  console.log('Starting scheduled job at:', new Date().toISOString());
-  await executeSequentially();
-}, {
-  timezone: "UTC" // Explicitly set timezone to UTC
-});
+// Function to run the daily stats job
+async function runDailyStatsJob() {
+    console.log('Starting scheduled job at:', new Date().toISOString());
+    await executeSequentially();
+}
 
-
-  module.exports = { startCronJobs: () => console.log("Cron jobs initialized.") };
+module.exports = { runPostQuoteJob, runDailyStatsJob };

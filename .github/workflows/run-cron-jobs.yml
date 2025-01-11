@@ -1,0 +1,37 @@
+name: Run Cron Jobs
+
+on:
+  schedule:
+    # Runs every 5 hours for tweet posting
+    - cron: '0 */5 * * *'
+    # Runs daily at 3 PM UTC for stats execution
+    - cron: '0 15 * * *'
+
+jobs:
+  cron-jobs:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.11.0 # Use your preferred Node.js version
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run the "postQuote" job every 5 hours
+      - name: Run postQuote job
+        if: github.event.schedule == '0 */5 * * *'
+        run: node -e "require('./configs/cronJobs').runPostQuoteJob()"
+
+      # Run the "executeSequentially" job daily at 3 PM UTC
+      - name: Run daily stats job
+        if: github.event.schedule == '0 15 * * *'
+        run: node -e "require('./configs/cronJobs').runDailyStatsJob()"
