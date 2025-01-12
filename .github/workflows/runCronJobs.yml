@@ -1,0 +1,46 @@
+name: Execute Cron Jobs
+
+on:
+  schedule:
+    # Runs every 3 hours for tweet posting
+    - cron: '0 */5 * * *'
+    # Runs daily at 3 PM UTC for stats execution
+    - cron: '0 15 * * *'
+  # Add push trigger
+  push:
+    branches:
+      - serverless  # or your default branch name
+
+jobs:
+  cron-jobs:
+    runs-on: ubuntu-latest
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      APP_ID: ${{ secrets.APP_ID }}
+      BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+      ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      API_SECRET: ${{ secrets.API_SECRET }}
+      API_KEY: ${{ secrets.API_KEY }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.11.0
+
+      - name: Install dependencies
+        run: npm install
+      
+      # Modified postQuote job to run on both schedule and push
+      - name: Run postQuote job
+        if: github.event.schedule == '0 */5 * * *' || github.event_name == 'push'
+        run: node -e "require('./configs/cronJobs').runPostQuoteJob()"
+      
+      # Stats job remains unchanged
+      - name: Run daily stats job
+        if: github.event.schedule == '0 15 * * *'
+        run: node -e "require('./configs/cronJobs').runDailyStatsJob()"
