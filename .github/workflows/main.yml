@@ -3,7 +3,7 @@ name: Run Cron Jobs
 on:
   schedule:
     # Runs every 3 hours for tweet posting
-    - cron: '0 */3 * * *'
+    - cron: '0 */5 * * *'
     # Runs daily at 3 PM UTC for stats execution
     - cron: '0 15 * * *'
   # Add push trigger
@@ -37,7 +37,7 @@ jobs:
       
       # Modified postQuote job to run on both schedule and push
       - name: Run postQuote job
-        if: github.event.schedule == '0 */3 * * *' || github.event_name == 'push'
+        if: github.event.schedule == '0 */5 * * *' || github.event_name == 'push'
         run: node -e "require('./configs/cronJobs').runPostQuoteJob()"
       
       # Stats job remains unchanged
