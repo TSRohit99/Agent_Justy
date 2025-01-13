@@ -1,15 +1,15 @@
-name: Execute Cron Jobs
+name: Latest Cron Jobs
 
 on:
   schedule:
-    # Runs every 3 hours for tweet posting
-    - cron: '0 */5 * * *'
-    # Runs daily at 3 PM UTC for stats execution
+    # Runs daily at specific times
+    - cron: '0 8 * * *'
+    - cron: '0 12 * * *'
     - cron: '0 15 * * *'
-  # Add push trigger
+    - cron: '0 18 * * *'
   push:
     branches:
-      - serverless  # or your default branch name
+      - serverless # Replace with your default branch if needed
 
 jobs:
   cron-jobs:
@@ -22,6 +22,7 @@ jobs:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       API_SECRET: ${{ secrets.API_SECRET }}
       API_KEY: ${{ secrets.API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     
     steps:
       - name: Checkout code
@@ -34,13 +35,21 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-      
-      # Modified postQuote job to run on both schedule and push
-      - name: Run postQuote job
-        if: github.event.schedule == '0 */5 * * *' || github.event_name == 'push'
-        run: node -e "require('./configs/cronJobs').runPostQuoteJob()"
-      
-      # Stats job remains unchanged
+
+      - name: Run postLatestCtQuote job
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 8 * * *' }}
+        run: node -e "require('./configs/cronJobs').runPostLatestCtQuote()"
+
+      - name: Run postGamblingQuote job
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 12 * * *' }}
+        run: node -e "require('./configs/cronJobs').runPostGamblingQuote()"
+
       - name: Run daily stats job
-        if: github.event.schedule == '0 15 * * *'
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 15 * * *' }}
         run: node -e "require('./configs/cronJobs').runDailyStatsJob()"
+
+      - name: Run postPerpsQuote job
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 18 * * *' || github.event_name == 'push'}}
+        run: node -e "require('./configs/cronJobs').runPostPerpsQuote()"
+
+     

@@ -1,4 +1,4 @@
-const { postQuote } = require('../lib/quotesQueue');
+const { postGamblingQuote, postPerpsQuote, postLatestCtQuote } = require('../lib/quotesQueue');
 const { executeSequentially } = require('../lib/getStats');
 
 // // Immediately post a quote (e.g., for initialization or manual runs)
@@ -8,9 +8,17 @@ const { executeSequentially } = require('../lib/getStats');
 // })();
 
 // Function to run the quote posting job
-async function runPostQuoteJob() {
+async function runPostGamblingQuote() {
     console.log('Running scheduled tweet...');
-    await postQuote();
+    await postGamblingQuote();
+}
+async function runPostPerpsQuote() {
+    console.log('Running scheduled tweet...');
+    await postPerpsQuote();
+}
+async function runPostLatestCtQuote() {
+    console.log('Running scheduled tweet...');
+    await postLatestCtQuote();
 }
 
 // Function to run the daily stats job
@@ -19,4 +27,8 @@ async function runDailyStatsJob() {
     await executeSequentially();
 }
 
-module.exports = { runPostQuoteJob, runDailyStatsJob };
+// runPostGamblingQuote();
+// runPostPerpsQuote();
+// runPostLatestCtQuote();
+
+module.exports = { runPostGamblingQuote,runPostPerpsQuote,runPostLatestCtQuote, runDailyStatsJob };
