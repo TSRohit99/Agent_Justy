@@ -5,7 +5,7 @@ on:
     # Runs daily at specific times
     - cron: '0 8 * * *'
     - cron: '0 12 * * *'
-    - cron: '0 15 * * *'
+    - cron: '15 15 * * *'
     - cron: '0 18 * * *'
   push:
     branches:
@@ -45,7 +45,7 @@ jobs:
         run: node -e "require('./configs/cronJobs').runPostGamblingQuote()"
 
       - name: Run daily stats job
-        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 15 * * *' }}
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '15 15 * * *' }}
         run: node -e "require('./configs/cronJobs').runDailyStatsJob()"
 
       - name: Run postPerpsQuote job
