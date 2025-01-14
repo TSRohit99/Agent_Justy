@@ -3,7 +3,9 @@ name: Execute Cron Jobs
 on:
   schedule:
     # Runs daily at specific times
+    - cron: '0 6 * * *'
     - cron: '0 8 * * *'
+    - cron: '0 10 * * *'
     - cron: '0 12 * * *'
     - cron: '0 16 * * *'
     - cron: '0 18 * * *'
@@ -49,7 +51,7 @@ jobs:
         run: node -e "require('./configs/cronJobs').runDailyStatsJob()"
 
       - name: Run postPerpsQuote job
-        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 18 * * *' || github.event_name == 'push'}}
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 18 * * *' || github.event.schedule == '0 6 * * *' || github.event.schedule == '0 10 * * *' || github.event_name == 'push'}}
         run: node -e "require('./configs/cronJobs').runPostPerpsQuote()"
 
      
