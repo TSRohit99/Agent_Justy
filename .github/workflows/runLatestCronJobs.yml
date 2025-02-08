@@ -7,7 +7,7 @@ on:
     - cron: '0 8 * * *'
     - cron: '0 10 * * *'
     - cron: '0 12 * * *'
-    - cron: '0 16 * * *'
+    - cron: '0 14 * * *'
     - cron: '0 18 * * *'
   push:
     branches:
@@ -47,7 +47,7 @@ jobs:
         run: node -e "require('./configs/cronJobs').runPostGamblingQuote()"
 
       - name: Run daily stats job
-        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 16 * * *' }}
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 14 * * *' }}
         run: node -e "require('./configs/cronJobs').runDailyStatsJob()"
 
       - name: Run postPerpsQuote job
