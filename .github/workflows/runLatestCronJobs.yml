@@ -6,12 +6,12 @@ on:
     - cron: '0 6 * * *'
     - cron: '0 8 * * *'
     - cron: '0 10 * * *'
-    - cron: '0 12 * * *'
+    # - cron: '0 12 * * *'
     - cron: '0 14 * * *'
     - cron: '0 18 * * *'
   push:
     branches:
-      - serverless # Replace with your default branch if needed
+      - serverless 
 
 jobs:
   cron-jobs:
@@ -42,9 +42,9 @@ jobs:
         if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 8 * * *' }}
         run: node -e "require('./configs/cronJobs').runPostLatestCtQuote()"
 
-      - name: Run postGamblingQuote job
-        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 12 * * *' }}
-        run: node -e "require('./configs/cronJobs').runPostGamblingQuote()"
+      # - name: Run postGamblingQuote job
+      #   if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 12 * * *' }}
+      #   run: node -e "require('./configs/cronJobs').runPostGamblingQuote()"
 
       - name: Run daily stats job
         if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 14 * * *' }}
