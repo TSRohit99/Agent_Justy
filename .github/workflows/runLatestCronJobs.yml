@@ -4,9 +4,9 @@ on:
   schedule:
     # Runs daily at specific times
     - cron: '0 6 * * *'
-    - cron: '0 8 * * *'
+    # - cron: '0 8 * * *'
     - cron: '0 10 * * *'
-    # - cron: '0 12 * * *'
+    - cron: '0 12 * * *'
     - cron: '0 14 * * *'
     - cron: '0 18 * * *'
   push:
@@ -38,13 +38,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run postLatestCtQuote job
-        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 8 * * *' }}
-        run: node -e "require('./configs/cronJobs').runPostLatestCtQuote()"
+      # - name: Run postLatestCtQuote job
+      #   if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 8 * * *' }}
+      #   run: node -e "require('./configs/cronJobs').runPostLatestCtQuote()"
 
-      # - name: Run postGamblingQuote job
-      #   if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 12 * * *' }}
-      #   run: node -e "require('./configs/cronJobs').runPostGamblingQuote()"
+      - name: Run postGamblingQuote job
+        if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 12 * * *' }}
+        run: node -e "require('./configs/cronJobs').runPostGamblingQuote()"
 
       - name: Run daily stats job
         if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 14 * * *' }}
